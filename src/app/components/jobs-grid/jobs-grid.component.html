@@ -16,9 +16,11 @@
         </div>
 
         <!-- Grid -->
-        <ag-grid-angular class="ag-theme-quartz-dark w-full h-full" [rowData]="store.jobs()" [columnDefs]="colDefs"
-            [defaultColDef]="defaultColDef" [pagination]="true" [paginationPageSize]="20" [rowHeight]="rowHeight"
-            [quickFilterText]="quickFilterText" [suppressCellFocus]="true">
-        </ag-grid-angular>
+        <div class="ag-theme-quartz-dark w-full h-full">
+            <ag-grid-angular style="width: 100%; height: 100%;" [rowData]="store.jobs()" [columnDefs]="colDefs"
+                [defaultColDef]="defaultColDef" [pagination]="true" [paginationPageSize]="20" [rowHeight]="rowHeight"
+                [quickFilterText]="quickFilterText" [suppressCellFocus]="true">
+            </ag-grid-angular>
+        </div>
     </div>
 </div>
