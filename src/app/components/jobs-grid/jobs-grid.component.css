@@ -1,20 +1,51 @@
-/* Customizing AG Grid Quartz Theme for even darker look if needed */
+/* Customizing AG Grid Quartz Theme */
 :host {
     display: block;
     height: 100%;
 }
 
 ::ng-deep .ag-theme-quartz-dark {
-    --ag-background-color: #0f172a;
-    /* slate-900 */
+    /* Reset background to transparent for blending */
+    --ag-background-color: transparent;
+
+    /* Header styling */
     --ag-header-background-color: #1e293b;
     /* slate-800 */
-    --ag-row-hover-color: #334155;
-    /* slate-700 */
-    --ag-odd-row-background-color: #0f172a;
-    --ag-border-color: #334155;
-    --ag-foreground-color: #cbd5e1;
-    /* slate-300 */
     --ag-header-foreground-color: #f8fafc;
     /* slate-50 */
+
+    /* Row styling */
+    --ag-odd-row-background-color: rgba(30, 41, 59, 0.5);
+    /* slate-800 with 50% opacity */
+    --ag-row-hover-color: #334155;
+    /* slate-700 */
+
+    /* Border styling */
+    --ag-border-color: #334155;
+    /* slate-700 */
+    --ag-secondary-border-color: #334155;
+    /* slate-700 */
+
+    /* Text styling */
+    --ag-foreground-color: #e2e8f0;
+    /* slate-200 */
+    --ag-data-color: #e2e8f0;
+    /* slate-200 */
+
+    font-family: inherit;
+}
+
+/* Force transparency on the root wrapper elements to ensure the app background shows through */
+::ng-deep .ag-theme-quartz-dark .ag-root-wrapper,
+::ng-deep .ag-theme-quartz-dark .ag-root-wrapper-body,
+::ng-deep .ag-theme-quartz-dark .ag-root {
+    background-color: transparent !important;
+}
+
+/* Header typography overrides */
+::ng-deep .ag-theme-quartz-dark .ag-header-cell {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.75rem;
 }

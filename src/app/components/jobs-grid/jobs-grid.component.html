@@ -8,7 +8,7 @@
 
     <div class="flex-1 w-full bg-slate-900 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
         <ag-grid-angular class="ag-theme-quartz-dark w-full h-full" [rowData]="store.jobs()" [columnDefs]="colDefs"
-            [defaultColDef]="defaultColDef" [pagination]="true" [paginationPageSize]="20">
+            [defaultColDef]="defaultColDef" [pagination]="true" [paginationPageSize]="20" [rowHeight]="rowHeight">
         </ag-grid-angular>
     </div>
 </div>

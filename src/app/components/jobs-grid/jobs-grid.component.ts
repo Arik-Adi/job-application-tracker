@@ -32,8 +32,10 @@ export class JobsGridComponent {
             }
         },
         { field: 'dateApplied', headerName: 'Date Applied', filter: 'agDateColumnFilter' },
-        { field: 'salaryRange', headerName: 'Salary', valueFormatter: params => params.value ? `$${params.value}` : '-' }
+        { field: 'salaryRange', headerName: 'Salary', valueFormatter: params => params.value ? params.value : '-' }
     ];
+
+    rowHeight = 50;
 
     defaultColDef: ColDef = {
         sortable: true,
