@@ -18,12 +18,15 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 export class JobsGridComponent {
     readonly store = inject(JobStore);
 
+    // State for Quick Filter
+    quickFilterText = '';
+
     // Column Definitions: Defines the columns to be displayed.
     colDefs: ColDef[] = [
-        { field: 'company', headerName: 'Company', filter: true, flex: 1 },
-        { field: 'role', headerName: 'Role', filter: true, flex: 1 },
+        { field: 'company', headerName: 'Company', flex: 1 },
+        { field: 'role', headerName: 'Role', flex: 1 },
         {
-            field: 'status', headerName: 'Status', filter: true, flex: 1,
+            field: 'status', headerName: 'Status', flex: 1,
             cellClassRules: {
                 'text-green-400': params => params.value === 'Offer',
                 'text-red-400': params => params.value === 'Rejected',
@@ -31,7 +34,7 @@ export class JobsGridComponent {
                 'text-amber-400': params => params.value === 'Applied'
             }
         },
-        { field: 'dateApplied', headerName: 'Date Applied', filter: 'agDateColumnFilter' },
+        { field: 'dateApplied', headerName: 'Date Applied', valueFormatter: params => params.value ? new Date(params.value).toLocaleDateString() : '-' },
         { field: 'salaryRange', headerName: 'Salary', valueFormatter: params => params.value ? params.value : '-' }
     ];
 
@@ -41,4 +44,9 @@ export class JobsGridComponent {
         sortable: true,
         resizable: true
     };
+
+    onFilterTextBoxChanged(event: Event) {
+        const target = event.target as HTMLInputElement;
+        this.quickFilterText = target.value;
+    }
 }
