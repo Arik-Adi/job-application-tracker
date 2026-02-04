@@ -3,13 +3,15 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef, ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import { JobStore } from '../../store/job.store';
 import { TranslatePipe } from '@ngx-translate/core';
+import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+import { ButtonComponent } from '../../shared/components/button/button.component';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 @Component({
     selector: 'app-jobs-grid',
     standalone: true,
-    imports: [AgGridAngular, TranslatePipe],
+    imports: [AgGridAngular, TranslatePipe, PageHeaderComponent, ButtonComponent],
     templateUrl: './jobs-grid.component.html',
     styleUrl: './jobs-grid.component.css'
 })

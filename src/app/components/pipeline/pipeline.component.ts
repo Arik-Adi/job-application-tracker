@@ -4,11 +4,12 @@ import { JobStore } from '../../store/job.store';
 import { Job, JobStatus } from '../../models/job.model';
 import { TranslatePipe } from '@ngx-translate/core';
 import { DatePipe, NgClass } from '@angular/common';
+import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 
 @Component({
     selector: 'app-pipeline',
     standalone: true,
-    imports: [DragDropModule, TranslatePipe, DatePipe, NgClass],
+    imports: [DragDropModule, TranslatePipe, DatePipe, NgClass, PageHeaderComponent],
     templateUrl: './pipeline.component.html',
     styleUrl: './pipeline.component.css'
 })
