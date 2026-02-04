@@ -1,0 +1,20 @@
+/* Customizing AG Grid Quartz Theme for even darker look if needed */
+:host {
+    display: block;
+    height: 100%;
+}
+
+::ng-deep .ag-theme-quartz-dark {
+    --ag-background-color: #0f172a;
+    /* slate-900 */
+    --ag-header-background-color: #1e293b;
+    /* slate-800 */
+    --ag-row-hover-color: #334155;
+    /* slate-700 */
+    --ag-odd-row-background-color: #0f172a;
+    --ag-border-color: #334155;
+    --ag-foreground-color: #cbd5e1;
+    /* slate-300 */
+    --ag-header-foreground-color: #f8fafc;
+    /* slate-50 */
+}

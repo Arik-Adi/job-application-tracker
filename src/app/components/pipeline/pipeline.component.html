@@ -1,0 +1,52 @@
+<div class="h-full flex flex-col space-y-4">
+    <div class="flex justify-between items-center">
+        <h2 class="text-2xl font-bold text-white">{{ 'SIDEBAR.PIPELINE' | translate }}</h2>
+    </div>
+
+    <div class="flex-1 overflow-x-auto overflow-y-hidden">
+        <div class="flex gap-6 h-full min-w-max pb-4">
+            @for (lane of lanes; track lane.status) {
+            <div class="w-80 flex flex-col bg-slate-800/50 rounded-xl border border-slate-700 overflow-hidden">
+                <!-- Lane Header -->
+                <div class="p-4 border-b border-slate-700 flex justify-between items-center" [ngClass]="lane.color">
+                    <h3 class="font-semibold text-white">{{ lane.title }}</h3>
+                    <span class="text-xs bg-slate-900/50 text-slate-300 px-2 py-1 rounded-full">
+                        {{ getJobsByStatus(lane.status).length }}
+                    </span>
+                </div>
+
+                <!-- Lane Body (Drop List) -->
+                <div cdkDropList [id]="lane.status" [cdkDropListData]="lane.status"
+                    [cdkDropListConnectedTo]="['Wishlist', 'Applied', 'Interviewing', 'Offer', 'Rejected']"
+                    (cdkDropListDropped)="drop($event)"
+                    class="flex-1 p-3 space-y-3 overflow-y-auto min-h-0 bg-slate-900/30">
+
+                    @for (job of getJobsByStatus(lane.status); track job.id) {
+                    <div cdkDrag [cdkDragData]="job"
+                        class="bg-slate-800 p-4 rounded-lg border border-slate-700 shadow-sm hover:shadow-md hover:border-indigo-500/50 cursor-grab active:cursor-grabbing group transition-all">
+
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-white group-hover:text-indigo-400 transition-colors">{{ job.role
+                                }}</h4>
+                            @if (job.status === 'Offer') {
+                            <span class="text-xs text-green-400">★</span>
+                            }
+                        </div>
+
+                        <div class="text-sm text-slate-400 mb-3">{{ job.company }}</div>
+
+                        <div class="flex justify-between items-center text-xs text-slate-500">
+                            <span>{{ job.dateApplied | date:'MMM d' }}</span>
+                            @if (job.salaryRange) {
+                            <span>{{ job.salaryRange }}</span>
+                            }
+                        </div>
+                    </div>
+                    }
+
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</div>

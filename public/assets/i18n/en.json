@@ -1,0 +1,31 @@
+{
+    "APP": {
+        "TITLE": "DevStep",
+        "SUBTITLE": "Career Pipeline"
+    },
+    "SIDEBAR": {
+        "DASHBOARD": "Dashboard",
+        "JOBS": "Jobs",
+        "PIPELINE": "Pipeline",
+        "KNOWLEDGE_BASE": "Knowledge Base",
+        "SETTINGS": "Settings"
+    },
+    "DASHBOARD": {
+        "TITLE": "Dashboard",
+        "WELCOME": "Welcome back! Here's your career pipeline status.",
+        "ADD_JOB": "+ Add New Job",
+        "STATS": {
+            "ACTIVE_APPS": "Active Applications",
+            "THIS_WEEK": "+{{count}} this week",
+            "INTERVIEWS_PENDING": "Interviews Pending",
+            "NEXT_INTERVIEW": "Next: {{company}} ({{time}})",
+            "OFFER_RATE": "Offer Rate",
+            "OFFER_BASIS": "Based on last {{count}} apps"
+        },
+        "INSIGHTS": {
+            "TITLE": "Actionable Insights",
+            "RECOMMENDED": "Recommended for {{company}} interview.",
+            "DESCRIPTION_NOTE": "{{company}} job description emphasizes {{skill}} mastery."
+        }
+    }
+}

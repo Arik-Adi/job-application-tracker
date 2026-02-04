@@ -1,0 +1,18 @@
+<div class="h-full flex flex-col space-y-4">
+    <div class="flex justify-between items-center">
+        <h2 class="text-2xl font-bold text-white">{{ 'SIDEBAR.JOBS' | translate }}</h2>
+        <div class="flex gap-2">
+            <!-- Placeholder for future functionality -->
+            <button
+                class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                + New Application
+            </button>
+        </div>
+    </div>
+
+    <div class="flex-1 w-full bg-slate-900 rounded-xl overflow-hidden border border-slate-700 shadow-xl">
+        <ag-grid-angular class="ag-theme-quartz-dark w-full h-full" [rowData]="store.jobs()" [columnDefs]="colDefs"
+            [defaultColDef]="defaultColDef" [pagination]="true" [paginationPageSize]="20">
+        </ag-grid-angular>
+    </div>
+</div>
