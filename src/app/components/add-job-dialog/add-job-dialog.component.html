@@ -31,8 +31,8 @@
                 </div>
             </div>
 
-            <!-- Status & Salary -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Status, Date & Salary -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="space-y-1.5">
                     <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.STATUS' | translate }}</label>
                     <select formControlName="status"
@@ -44,6 +44,13 @@
                 </div>
 
                 <div class="space-y-1.5">
+                    <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.DATE_APPLIED' | translate
+                        }}</label>
+                    <input type="date" formControlName="dateApplied"
+                        class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors appearance-none decoration-white">
+                </div>
+
+                <div class="space-y-1.5">
                     <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.SALARY' | translate }}</label>
                     <input type="text" formControlName="salaryRange"
                         class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-600"
@@ -51,16 +58,50 @@
                 </div>
             </div>
 
-            <!-- URL -->
-            <div class="space-y-1.5">
-                <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.URL' | translate }}</label>
-                <div class="relative">
-                    <input type="text" formControlName="url"
-                        class="w-full bg-slate-800/50 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-600"
-                        [placeholder]="'https://linkedin.com/jobs/...'">
-                    <span
-                        class="material-icons absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm">link</span>
+            <!-- Links & Contact -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                    <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.URL' | translate }}</label>
+                    <div class="relative">
+                        <input type="text" formControlName="url"
+                            class="w-full bg-slate-800/50 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-600"
+                            [placeholder]="'https://linkedin.com/jobs/...'">
+                        <span
+                            class="material-icons absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm">link</span>
+                    </div>
                 </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.GLASSDOOR' | translate
+                        }}</label>
+                    <div class="relative">
+                        <input type="text" formControlName="glassdoorUrl"
+                            class="w-full bg-slate-800/50 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-600"
+                            [placeholder]="'https://glassdoor.com/reviews/...'">
+                        <span
+                            class="material-icons absolute left-2.5 top-1/2 -translate-y-1/2 text-green-500/70 text-sm">reviews</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Text -->
+            <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.CONTACT' | translate }}</label>
+                <div class="relative">
+                    <input type="text" formControlName="recruitingContact"
+                        class="w-full bg-slate-800/50 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-600"
+                        [placeholder]="'Recruiter Name / Email'">
+                    <span
+                        class="material-icons absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm">person</span>
+                </div>
+            </div>
+
+            <!-- Comments -->
+            <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.COMMENTS' | translate }}</label>
+                <textarea formControlName="comments" rows="2"
+                    class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-600 resize-none"
+                    [placeholder]="'My thoughts on this role...'"></textarea>
             </div>
 
             <!-- Resume Upload -->

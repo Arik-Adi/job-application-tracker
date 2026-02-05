@@ -11,6 +11,9 @@ export interface Job {
     description: string;
     techStack: string[];
     matchScore: number;
+    recruitingContact?: string;
+    comments?: string;
+    glassdoorUrl?: string;
     documents?: {
         cvUrl: string;
         coverLetterUrl?: string;

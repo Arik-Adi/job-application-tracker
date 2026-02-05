@@ -27,10 +27,14 @@ export class AddJobDialogComponent {
             company: ['', Validators.required],
             role: ['', Validators.required],
             status: ['Wishlist', Validators.required],
+            dateApplied: [new Date().toISOString().split('T')[0], Validators.required],
             salaryRange: [''],
             location: [''],
+            recruitingContact: [''],
+            comments: [''],
             description: [''],
-            url: ['', [Validators.pattern('https?://.+')]]
+            url: ['', [Validators.pattern('https?://.+')]],
+            glassdoorUrl: ['', [Validators.pattern('https?://.+')]]
         });
     }
 
@@ -46,6 +50,7 @@ export class AddJobDialogComponent {
             const formValue = this.form.value;
             const newJob: Partial<Job> = {
                 ...formValue,
+                dateApplied: formValue.dateApplied ? new Date(formValue.dateApplied) : new Date(),
                 // In a real app, we would upload the file here and get a URL back
                 // For now, we can perhaps store the file name or a mock URL if needed, 
                 // or pass the file object back to the container to handle.

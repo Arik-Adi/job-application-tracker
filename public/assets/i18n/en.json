@@ -10,6 +10,10 @@
         "STATUS": "Current Status",
         "SALARY": "Salary Range",
         "URL": "Job Post URL",
+        "DATE_APPLIED": "Date Applied",
+        "CONTACT": "Recruiting Contact",
+        "COMMENTS": "Comments",
+        "GLASSDOOR": "Glassdoor URL",
         "RESUME": "Resume / CV",
         "SUBMIT": "Add Application"
     },

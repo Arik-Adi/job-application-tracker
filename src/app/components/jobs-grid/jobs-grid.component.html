@@ -94,6 +94,12 @@
                                 </span>
                             </div>
                         </th>
+                        <th class="p-4 text-xs font-semibold tracking-wider text-slate-400 uppercase select-none">
+                            {{ 'Contact' | translate }}
+                        </th>
+                        <th class="p-4 text-xs font-semibold tracking-wider text-slate-400 uppercase select-none">
+                            {{ 'Links' | translate }}
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-800/50">
@@ -112,10 +118,26 @@
                         <td class="p-4 text-slate-300 font-mono text-sm">
                             {{ job.salaryRange || '-' }}
                         </td>
+                        <td class="p-4 text-slate-400 text-sm">
+                            {{ job.recruitingContact || '-' }}
+                        </td>
+                        <td class="p-4 flex gap-2 items-center">
+                            @if (job.glassdoorUrl) {
+                            <a [href]="job.glassdoorUrl" target="_blank"
+                                class="text-green-500 hover:text-green-400 transition-colors" title="Glassdoor">
+                                <span class="material-icons text-sm">reviews</span>
+                            </a>
+                            }
+                            @if (job.comments) {
+                            <span class="text-slate-500 cursor-help" [title]="job.comments">
+                                <span class="material-icons text-sm">chat_bubble_outline</span>
+                            </span>
+                            }
+                        </td>
                     </tr>
                     } @empty {
                     <tr>
-                        <td colspan="5" class="p-8 text-center text-slate-500 italic">
+                        <td colspan="7" class="p-8 text-center text-slate-500 italic">
                             {{ 'No jobs found matching your search.' | translate }}
                         </td>
                     </tr>
