@@ -1,52 +1,91 @@
-import { Component, inject } from '@angular/core';
-import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef, ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
+import { Component, computed, inject, signal } from '@angular/core';
 import { JobStore } from '../../store/job.store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 import { ButtonComponent } from '../../shared/components/button/button.component';
+import { CommonModule, DatePipe, CurrencyPipe } from '@angular/common';
 
-ModuleRegistry.registerModules([AllCommunityModule]);
+type SortDirection = 'asc' | 'desc' | '';
+type SortColumn = 'company' | 'role' | 'status' | 'dateApplied' | 'salaryRange' | '';
 
 @Component({
     selector: 'app-jobs-grid',
     standalone: true,
-    imports: [AgGridAngular, TranslatePipe, PageHeaderComponent, ButtonComponent],
+    imports: [CommonModule, TranslatePipe, PageHeaderComponent, ButtonComponent],
+    providers: [DatePipe, CurrencyPipe],
     templateUrl: './jobs-grid.component.html',
     styleUrl: './jobs-grid.component.css'
 })
 export class JobsGridComponent {
     readonly store = inject(JobStore);
 
-    // State for Quick Filter
-    quickFilterText = '';
+    // State
+    searchQuery = signal('');
+    sortColumn = signal<SortColumn>('');
+    sortDirection = signal<SortDirection>('');
 
-    // Column Definitions: Defines the columns to be displayed.
-    colDefs: ColDef[] = [
-        { field: 'company', headerName: 'Company', flex: 1 },
-        { field: 'role', headerName: 'Role', flex: 1 },
-        {
-            field: 'status', headerName: 'Status', flex: 1,
-            cellClassRules: {
-                'text-green-400': params => params.value === 'Offer',
-                'text-red-400': params => params.value === 'Rejected',
-                'text-blue-400': params => params.value === 'Interviewing',
-                'text-amber-400': params => params.value === 'Applied'
-            }
-        },
-        { field: 'dateApplied', headerName: 'Date Applied', valueFormatter: params => params.value ? new Date(params.value).toLocaleDateString() : '-' },
-        { field: 'salaryRange', headerName: 'Salary', valueFormatter: params => params.value ? params.value : '-' }
-    ];
+    // Computed View Model
+    filteredJobs = computed(() => {
+        const jobs = this.store.jobs();
+        const query = this.searchQuery().toLowerCase();
+        const col = this.sortColumn();
+        const dir = this.sortDirection();
 
-    rowHeight = 50;
+        // 1. Filter
+        let result = jobs;
+        if (query) {
+            result = result.filter(job =>
+                job.company.toLowerCase().includes(query) ||
+                job.role.toLowerCase().includes(query) ||
+                job.status.toLowerCase().includes(query)
+            );
+        }
 
-    defaultColDef: ColDef = {
-        sortable: true,
-        resizable: true
-    };
+        // 2. Sort
+        if (col && dir) {
+            result = [...result].sort((a, b) => {
+                const valA = a[col] || '';
+                const valB = b[col] || '';
 
-    onFilterTextBoxChanged(event: Event) {
+                if (valA < valB) return dir === 'asc' ? -1 : 1;
+                if (valA > valB) return dir === 'asc' ? 1 : -1;
+                return 0;
+            });
+        }
+
+        return result;
+    });
+
+    onSearch(event: Event) {
         const target = event.target as HTMLInputElement;
-        this.quickFilterText = target.value;
+        this.searchQuery.set(target.value);
+    }
+
+    toggleSort(column: SortColumn) {
+        if (this.sortColumn() === column) {
+            // cycle: asc -> desc -> off
+            const currentDir = this.sortDirection();
+            if (currentDir === 'asc') {
+                this.sortDirection.set('desc');
+            } else if (currentDir === 'desc') {
+                this.sortDirection.set('');
+                this.sortColumn.set('');
+            } else {
+                this.sortDirection.set('asc');
+            }
+        } else {
+            this.sortColumn.set(column);
+            this.sortDirection.set('asc');
+        }
+    }
+
+    getStatusClass(status: string): string {
+        switch (status) {
+            case 'Offer': return 'text-green-400 bg-green-400/10 px-2 py-1 rounded-md';
+            case 'Rejected': return 'text-red-400 bg-red-400/10 px-2 py-1 rounded-md';
+            case 'Interviewing': return 'text-blue-400 bg-blue-400/10 px-2 py-1 rounded-md';
+            case 'Applied': return 'text-amber-400 bg-amber-400/10 px-2 py-1 rounded-md';
+            default: return 'text-slate-400';
+        }
     }
 }

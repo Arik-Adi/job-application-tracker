@@ -1,7 +1,6 @@
-/* Customizing AG Grid Quartz Theme */
 :host {
     display: block;
     height: 100%;
 }
 
-/* Theme overrides moved to global styles.css to ensure correct application */
+/* No AG Grid overrides needed anymore! */

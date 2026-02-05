@@ -1,26 +1,118 @@
-<div class="h-full flex flex-col space-y-4">
+<div class="h-full flex flex-col p-6 gap-6">
     <app-page-header>
-        <ng-container title>{{ 'SIDEBAR.JOBS' | translate }}</ng-container>
+        <span title>{{ 'Jobs' | translate }}</span>
+        <span subtitle>{{ 'Track and manage your applications' | translate }}</span>
         <ng-container actions>
-            <app-button>+ New Application</app-button>
+            <app-button variant="primary" icon="add">
+                {{ 'New Application' | translate }}
+            </app-button>
         </ng-container>
     </app-page-header>
 
     <div
         class="flex-1 w-full bg-slate-900/50 rounded-xl overflow-hidden border border-slate-700 shadow-xl flex flex-col">
         <!-- Search Bar -->
-        <div class="p-4 bg-slate-800/50 border-b border-slate-700">
-            <input type="text" [placeholder]="'Simple Search...' | translate"
-                class="w-full md:w-1/3 bg-slate-900 text-white placeholder-slate-500 border border-slate-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
-                (input)="onFilterTextBoxChanged($event)">
+        <div class="p-4 bg-slate-800/30 border-b border-slate-700 backdrop-blur-sm">
+            <div class="relative w-full md:w-1/3">
+                <input type="text" [placeholder]="'Simple Search...' | translate"
+                    class="w-full bg-slate-950/50 text-slate-200 placeholder-slate-500 border border-slate-700 rounded-lg pl-10 pr-4 py-2.5 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 outline-none transition-all"
+                    (input)="onSearch($event)">
+                <span
+                    class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 material-icons text-sm">search</span>
+            </div>
         </div>
 
-        <!-- Grid -->
-        <div class="ag-theme-quartz-dark w-full h-full">
-            <ag-grid-angular style="width: 100%; height: 100%;" [rowData]="store.jobs()" [columnDefs]="colDefs"
-                [defaultColDef]="defaultColDef" [pagination]="true" [paginationPageSize]="20" [rowHeight]="rowHeight"
-                [quickFilterText]="quickFilterText" [suppressCellFocus]="true">
-            </ag-grid-angular>
+        <!-- Custom Table -->
+        <div class="flex-1 overflow-auto">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-slate-800/80 sticky top-0 z-10 backdrop-blur-md">
+                    <tr>
+                        <th (click)="toggleSort('company')"
+                            class="p-4 text-xs font-semibold tracking-wider text-slate-400 uppercase cursor-pointer hover:text-slate-200 transition-colors select-none">
+                            <div class="flex items-center gap-2">
+                                {{ 'Company' | translate }}
+                                <span class="material-icons text-[14px] opacity-50" *ngIf="sortColumn() === 'company'">
+                                    {{ sortDirection() === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
+                                </span>
+                            </div>
+                        </th>
+                        <th (click)="toggleSort('role')"
+                            class="p-4 text-xs font-semibold tracking-wider text-slate-400 uppercase cursor-pointer hover:text-slate-200 transition-colors select-none">
+                            <div class="flex items-center gap-2">
+                                {{ 'Role' | translate }}
+                                <span class="material-icons text-[14px] opacity-50" *ngIf="sortColumn() === 'role'">
+                                    {{ sortDirection() === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
+                                </span>
+                            </div>
+                        </th>
+                        <th (click)="toggleSort('status')"
+                            class="p-4 text-xs font-semibold tracking-wider text-slate-400 uppercase cursor-pointer hover:text-slate-200 transition-colors select-none">
+                            <div class="flex items-center gap-2">
+                                {{ 'Status' | translate }}
+                                <span class="material-icons text-[14px] opacity-50" *ngIf="sortColumn() === 'status'">
+                                    {{ sortDirection() === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
+                                </span>
+                            </div>
+                        </th>
+                        <th (click)="toggleSort('dateApplied')"
+                            class="p-4 text-xs font-semibold tracking-wider text-slate-400 uppercase cursor-pointer hover:text-slate-200 transition-colors select-none">
+                            <div class="flex items-center gap-2">
+                                {{ 'Date Applied' | translate }}
+                                <span class="material-icons text-[14px] opacity-50"
+                                    *ngIf="sortColumn() === 'dateApplied'">
+                                    {{ sortDirection() === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
+                                </span>
+                            </div>
+                        </th>
+                        <th (click)="toggleSort('salaryRange')"
+                            class="p-4 text-xs font-semibold tracking-wider text-slate-400 uppercase cursor-pointer hover:text-slate-200 transition-colors select-none">
+                            <div class="flex items-center gap-2">
+                                {{ 'Salary' | translate }}
+                                <span class="material-icons text-[14px] opacity-50"
+                                    *ngIf="sortColumn() === 'salaryRange'">
+                                    {{ sortDirection() === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
+                                </span>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800/50">
+                    @for (job of filteredJobs(); track job.id) {
+                    <tr class="hover:bg-slate-800/30 transition-colors group">
+                        <td class="p-4 text-slate-200 font-medium">{{ job.company }}</td>
+                        <td class="p-4 text-slate-300">{{ job.role }}</td>
+                        <td class="p-4">
+                            <span class="text-xs font-medium inline-block" [ngClass]="getStatusClass(job.status)">
+                                {{ job.status }}
+                            </span>
+                        </td>
+                        <td class="p-4 text-slate-400 text-sm">
+                            {{ job.dateApplied | date:'mediumDate' }}
+                        </td>
+                        <td class="p-4 text-slate-300 font-mono text-sm">
+                            {{ job.salaryRange || '-' }}
+                        </td>
+                    </tr>
+                    } @empty {
+                    <tr>
+                        <td colspan="5" class="p-8 text-center text-slate-500 italic">
+                            {{ 'No jobs found matching your search.' | translate }}
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer / Pagination Placeholder -->
+        <div
+            class="p-3 border-t border-slate-700 bg-slate-900/40 text-xs text-slate-500 flex justify-between items-center">
+            <span>Showing {{ filteredJobs().length }} results</span>
+            <!-- Simple placeholder pagination for now -->
+            <div class="flex gap-2">
+                <button class="px-2 py-1 rounded hover:bg-slate-800 disabled:opacity-50" disabled>Prev</button>
+                <button class="px-2 py-1 rounded hover:bg-slate-800 disabled:opacity-50" disabled>Next</button>
+            </div>
         </div>
     </div>
 </div>
