@@ -1,9 +1,12 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { JobStore } from '../../store/job.store';
+import { Job } from '../../models/job.model';
 import { TranslatePipe } from '@ngx-translate/core';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 import { ButtonComponent } from '../../shared/components/button/button.component';
 import { CommonModule, DatePipe, CurrencyPipe } from '@angular/common';
+import { Dialog, DialogModule } from '@angular/cdk/dialog';
+import { AddJobDialogComponent } from '../add-job-dialog/add-job-dialog.component';
 
 type SortDirection = 'asc' | 'desc' | '';
 type SortColumn = 'company' | 'role' | 'status' | 'dateApplied' | 'salaryRange' | '';
@@ -18,6 +21,7 @@ type SortColumn = 'company' | 'role' | 'status' | 'dateApplied' | 'salaryRange' 
 })
 export class JobsGridComponent {
     readonly store = inject(JobStore);
+    readonly dialog = inject(Dialog);
 
     // State
     searchQuery = signal('');
@@ -32,6 +36,29 @@ export class JobsGridComponent {
         { key: 'status', label: 'Status' },
         { key: 'salaryRange', label: 'Salary' }
     ];
+
+    onAddApplication() {
+        const dialogRef = this.dialog.open<Job>(AddJobDialogComponent, {
+            width: '500px',
+            disableClose: true,
+            panelClass: 'bg-transparent' // We handle styling in the component
+        });
+
+        dialogRef.closed.subscribe(result => {
+            if (result) {
+                // Generate a random ID for now since backend is mocked
+                const newJob = {
+                    ...result,
+                    id: crypto.randomUUID(),
+                    matchScore: 0,
+                    techStack: [],
+                    location: 'Remote' // Default for now
+                } as Job;
+
+                this.store.addJob(newJob);
+            }
+        });
+    }
 
     // Computed View Model
     filteredJobs = computed(() => {

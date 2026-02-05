@@ -1,0 +1,104 @@
+<div
+    class="bg-slate-900 border border-slate-700 rounded-xl shadow-2xl w-[500px] max-w-[90vw] overflow-hidden flex flex-col max-h-[90vh]">
+    <!-- Header -->
+    <div class="p-5 border-b border-slate-700 flex justify-between items-center bg-slate-800/50">
+        <h2 class="text-xl font-bold text-white">{{ 'ADD_JOB.TITLE' | translate }}</h2>
+        <button (click)="close()" class="text-slate-400 hover:text-white transition-colors">
+            <span class="material-icons">close</span>
+        </button>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div class="p-6 overflow-y-auto custom-scrollbar">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+
+            <!-- Company & Role -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                    <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.COMPANY' | translate }}</label>
+                    <input type="text" formControlName="company"
+                        class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-600"
+                        [class.border-red-500]="form.get('company')?.invalid && form.get('company')?.touched"
+                        [placeholder]="'Ex: Google'">
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.ROLE' | translate }}</label>
+                    <input type="text" formControlName="role"
+                        class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-600"
+                        [class.border-red-500]="form.get('role')?.invalid && form.get('role')?.touched"
+                        [placeholder]="'Ex: Senior Engineer'">
+                </div>
+            </div>
+
+            <!-- Status & Salary -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                    <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.STATUS' | translate }}</label>
+                    <select formControlName="status"
+                        class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors appearance-none">
+                        @for(status of statusOptions; track status) {
+                        <option [value]="status">{{ status }}</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.SALARY' | translate }}</label>
+                    <input type="text" formControlName="salaryRange"
+                        class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-600"
+                        [placeholder]="'Ex: $150k - $180k'">
+                </div>
+            </div>
+
+            <!-- URL -->
+            <div class="space-y-1.5">
+                <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.URL' | translate }}</label>
+                <div class="relative">
+                    <input type="text" formControlName="url"
+                        class="w-full bg-slate-800/50 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-600"
+                        [placeholder]="'https://linkedin.com/jobs/...'">
+                    <span
+                        class="material-icons absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm">link</span>
+                </div>
+            </div>
+
+            <!-- Resume Upload -->
+            <div class="space-y-2 pt-2 border-t border-slate-800">
+                <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.RESUME' | translate }}</label>
+
+                <div class="relative group cursor-pointer">
+                    <input type="file" (change)="onFileSelected($event)" accept=".pdf,.doc,.docx"
+                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+
+                    <div
+                        class="border-2 border-dashed border-slate-700 rounded-lg p-6 flex flex-col items-center justify-center transition-colors group-hover:border-indigo-500/50 group-hover:bg-slate-800/30">
+                        @if (selectedFile(); as file) {
+                        <div class="flex items-center gap-3 text-indigo-400">
+                            <span class="material-icons">description</span>
+                            <span class="font-medium truncate max-w-[200px]">{{ file.name }}</span>
+                            <span class="text-xs text-slate-500">({{ (file.size / 1024 / 1024) | number:'1.1-2' }}
+                                MB)</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-2">Click to replace</p>
+                        } @else {
+                        <span
+                            class="material-icons text-slate-500 text-3xl mb-2 group-hover:text-indigo-400 transition-colors">cloud_upload</span>
+                        <p class="text-sm text-slate-300 font-medium">Click to upload Resume</p>
+                        <p class="text-xs text-slate-500 mt-1">PDF, DOCX up to 5MB</p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="p-5 border-t border-slate-700 flex justify-end gap-3 bg-slate-800/30">
+        <app-button variant="secondary" (click)="close()">{{ 'CANCEL' | translate }}</app-button>
+        <app-button variant="primary" (click)="onSubmit()" [disabled]="form.invalid">
+            {{ 'ADD_JOB.SUBMIT' | translate }}
+        </app-button>
+    </div>
+</div>

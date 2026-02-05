@@ -3,7 +3,7 @@
         <span title>{{ 'Jobs' | translate }}</span>
         <span subtitle>{{ 'Track and manage your applications' | translate }}</span>
         <ng-container actions>
-            <app-button variant="primary" icon="add">
+            <app-button variant="primary" icon="add" (click)="onAddApplication()">
                 {{ 'New Application' | translate }}
             </app-button>
         </ng-container>

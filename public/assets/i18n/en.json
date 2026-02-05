@@ -3,6 +3,17 @@
         "TITLE": "DevStep",
         "SUBTITLE": "Career Pipeline"
     },
+    "ADD_JOB": {
+        "TITLE": "Add Application",
+        "COMPANY": "Company Name",
+        "ROLE": "Role Title",
+        "STATUS": "Current Status",
+        "SALARY": "Salary Range",
+        "URL": "Job Post URL",
+        "RESUME": "Resume / CV",
+        "SUBMIT": "Add Application"
+    },
+    "CANCEL": "Cancel",
     "SIDEBAR": {
         "DASHBOARD": "Dashboard",
         "JOBS": "Jobs",
