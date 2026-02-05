@@ -17,7 +17,7 @@
                 <div class="space-y-1.5">
                     <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.COMPANY' | translate }}</label>
                     <input type="text" formControlName="company"
-                        class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-600"
+                        class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-500/50"
                         [class.border-red-500]="form.get('company')?.invalid && form.get('company')?.touched"
                         [placeholder]="'Ex: Google'">
                 </div>
@@ -25,7 +25,7 @@
                 <div class="space-y-1.5">
                     <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.ROLE' | translate }}</label>
                     <input type="text" formControlName="role"
-                        class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-600"
+                        class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-500/50"
                         [class.border-red-500]="form.get('role')?.invalid && form.get('role')?.touched"
                         [placeholder]="'Ex: Senior Engineer'">
                 </div>
@@ -46,14 +46,14 @@
                 <div class="space-y-1.5">
                     <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.DATE_APPLIED' | translate
                         }}</label>
-                    <input type="date" formControlName="dateApplied"
-                        class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors appearance-none decoration-white">
+                    <input type="date" formControlName="dateApplied" [max]="maxDate"
+                        class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors appearance-none decoration-white cursor-pointer">
                 </div>
 
                 <div class="space-y-1.5">
                     <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.SALARY' | translate }}</label>
                     <input type="text" formControlName="salaryRange"
-                        class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-600"
+                        class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-500/50"
                         [placeholder]="'Ex: $150k - $180k'">
                 </div>
             </div>
@@ -64,7 +64,7 @@
                     <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.URL' | translate }}</label>
                     <div class="relative">
                         <input type="text" formControlName="url"
-                            class="w-full bg-slate-800/50 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-600"
+                            class="w-full bg-slate-800/50 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-500/50"
                             [placeholder]="'https://linkedin.com/jobs/...'">
                         <span
                             class="material-icons absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm">link</span>
@@ -76,7 +76,7 @@
                         }}</label>
                     <div class="relative">
                         <input type="text" formControlName="glassdoorUrl"
-                            class="w-full bg-slate-800/50 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-600"
+                            class="w-full bg-slate-800/50 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-500/50"
                             [placeholder]="'https://glassdoor.com/reviews/...'">
                         <span
                             class="material-icons absolute left-2.5 top-1/2 -translate-y-1/2 text-green-500/70 text-sm">reviews</span>
@@ -89,7 +89,7 @@
                 <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.CONTACT' | translate }}</label>
                 <div class="relative">
                     <input type="text" formControlName="recruitingContact"
-                        class="w-full bg-slate-800/50 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-600"
+                        class="w-full bg-slate-800/50 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-500/50"
                         [placeholder]="'Recruiter Name / Email'">
                     <span
                         class="material-icons absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm">person</span>
@@ -100,7 +100,7 @@
             <div class="space-y-1.5">
                 <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.COMMENTS' | translate }}</label>
                 <textarea formControlName="comments" rows="2"
-                    class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-600 resize-none"
+                    class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-3 py-2 text-slate-200 focus:border-indigo-500 outline-none transition-colors placeholder-slate-500/50 resize-none"
                     [placeholder]="'My thoughts on this role...'"></textarea>
             </div>
 

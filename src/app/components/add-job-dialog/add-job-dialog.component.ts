@@ -15,6 +15,7 @@ import { Job } from '../../models/job.model';
 export class AddJobDialogComponent {
     form: FormGroup;
     selectedFile = signal<File | null>(null);
+    maxDate = new Date().toISOString().split('T')[0];
 
     statusOptions = ['Wishlist', 'Applied', 'Interviewing', 'Offer', 'Rejected'];
 
@@ -51,10 +52,10 @@ export class AddJobDialogComponent {
             const newJob: Partial<Job> = {
                 ...formValue,
                 dateApplied: formValue.dateApplied ? new Date(formValue.dateApplied) : new Date(),
-                // In a real app, we would upload the file here and get a URL back
-                // For now, we can perhaps store the file name or a mock URL if needed, 
-                // or pass the file object back to the container to handle.
-                // Let's assume we just pass back the form data for now.
+                documents: this.selectedFile() ? {
+                    cvUrl: URL.createObjectURL(this.selectedFile()!),
+                    coverLetterUrl: ''
+                } : undefined,
                 createdAt: new Date(),
                 updatedAt: new Date()
             };

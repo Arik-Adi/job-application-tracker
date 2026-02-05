@@ -128,6 +128,12 @@
                                 <span class="material-icons text-sm">reviews</span>
                             </a>
                             }
+                            @if (job.documents?.cvUrl) {
+                            <a [href]="job.documents?.cvUrl" target="_blank"
+                                class="text-indigo-400 hover:text-indigo-300 transition-colors" title="View CV">
+                                <span class="material-icons text-sm">description</span>
+                            </a>
+                            }
                             @if (job.comments) {
                             <span class="text-slate-500 cursor-help" [title]="job.comments">
                                 <span class="material-icons text-sm">chat_bubble_outline</span>
