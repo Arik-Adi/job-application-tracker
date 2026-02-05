@@ -21,8 +21,17 @@ export class JobsGridComponent {
 
     // State
     searchQuery = signal('');
+    searchField = signal<string>('all');
     sortColumn = signal<SortColumn>('');
     sortDirection = signal<SortDirection>('');
+
+    readonly filterOptions = [
+        { key: 'all', label: 'All' },
+        { key: 'company', label: 'Company' },
+        { key: 'role', label: 'Role' },
+        { key: 'status', label: 'Status' },
+        { key: 'salaryRange', label: 'Salary' }
+    ];
 
     // Computed View Model
     filteredJobs = computed(() => {
@@ -30,15 +39,28 @@ export class JobsGridComponent {
         const query = this.searchQuery().toLowerCase();
         const col = this.sortColumn();
         const dir = this.sortDirection();
+        const field = this.searchField();
 
         // 1. Filter
         let result = jobs;
         if (query) {
-            result = result.filter(job =>
-                job.company.toLowerCase().includes(query) ||
-                job.role.toLowerCase().includes(query) ||
-                job.status.toLowerCase().includes(query)
-            );
+            result = result.filter(job => {
+                if (field === 'all') {
+                    return job.company.toLowerCase().includes(query) ||
+                        job.role.toLowerCase().includes(query) ||
+                        job.status.toLowerCase().includes(query) ||
+                        (job.salaryRange && job.salaryRange.toLowerCase().includes(query));
+                } else if (field === 'company') {
+                    return job.company.toLowerCase().includes(query);
+                } else if (field === 'role') {
+                    return job.role.toLowerCase().includes(query);
+                } else if (field === 'status') {
+                    return job.status.toLowerCase().includes(query);
+                } else if (field === 'salaryRange') {
+                    return job.salaryRange && job.salaryRange.toLowerCase().includes(query);
+                }
+                return false;
+            });
         }
 
         // 2. Sort
@@ -59,6 +81,10 @@ export class JobsGridComponent {
     onSearch(event: Event) {
         const target = event.target as HTMLInputElement;
         this.searchQuery.set(target.value);
+    }
+
+    setSearchField(field: string) {
+        this.searchField.set(field);
     }
 
     toggleSort(column: SortColumn) {
