@@ -1,9 +1,20 @@
 <div class="space-y-6">
     <app-page-header>
         <ng-container title>{{ 'DASHBOARD.TITLE' | translate }}</ng-container>
-        <ng-container subtitle>{{ 'DASHBOARD.WELCOME' | translate }}</ng-container>
+        <ng-container subtitle>
+            @if (auth.user$ | async; as user) {
+            Welcome back, {{ user.displayName }}
+            } @else {
+            {{ 'DASHBOARD.WELCOME' | translate }}
+            }
+        </ng-container>
         <ng-container actions>
-            <app-button>{{ 'DASHBOARD.ADD_JOB' | translate }}</app-button>
+            @if (auth.user$ | async) {
+            <app-button (click)="logout()" variant="outline">Sign Out</app-button>
+            } @else {
+            <app-button (click)="login()">Sign In with Google</app-button>
+            }
+            <app-button icon="add" (click)="addJob()">{{ 'DASHBOARD.ADD_JOB' | translate }}</app-button>
         </ng-container>
     </app-page-header>
 

@@ -22,16 +22,21 @@
                     class="flex-1 p-3 space-y-3 overflow-y-auto min-h-0 bg-slate-900/30">
 
                     @for (job of getJobsByStatus(lane.status); track job.id) {
-                    <div cdkDrag [cdkDragData]="job"
-                        class="bg-slate-800 p-4 rounded-lg border border-slate-700 shadow-sm hover:shadow-md hover:border-indigo-500/50 cursor-grab active:cursor-grabbing group transition-all">
+                    <div cdkDrag [cdkDragData]="job" (click)="onEdit(job)"
+                        class="bg-slate-800 p-4 rounded-lg border border-slate-700 shadow-sm hover:shadow-md hover:border-indigo-500/50 cursor-pointer active:cursor-grabbing group transition-all relative">
 
-                        <div class="flex justify-between items-start mb-2">
+                        <div class="flex justify-between items-start mb-2 pr-6">
                             <h4 class="font-bold text-white group-hover:text-indigo-400 transition-colors">{{ job.role
                                 }}</h4>
                             @if (job.status === 'Offer') {
                             <span class="text-xs text-green-400">★</span>
                             }
                         </div>
+
+                        <button (click)="onDelete(job.id, $event)"
+                            class="absolute top-2 right-2 text-slate-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span class="material-icons text-sm">close</span>
+                        </button>
 
                         <div class="text-sm text-slate-400 mb-3">{{ job.company }}</div>
 

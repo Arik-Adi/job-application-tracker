@@ -1,10 +1,12 @@
-import { Component, Inject, signal } from '@angular/core';
+import { Component, Inject, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ButtonComponent } from '../../shared/components/button/button.component';
 import { Job } from '../../models/job.model';
+import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
     selector: 'app-add-job-dialog',
@@ -13,29 +15,36 @@ import { Job } from '../../models/job.model';
     templateUrl: './add-job-dialog.component.html',
 })
 export class AddJobDialogComponent {
+    private storage = inject(Storage);
+    private auth = inject(AuthService);
+
     form: FormGroup;
     selectedFile = signal<File | null>(null);
     maxDate = new Date().toISOString().split('T')[0];
+    isEditMode = false;
+    isUploading = signal(false);
 
     statusOptions = ['Wishlist', 'Applied', 'Interviewing', 'Offer', 'Rejected'];
 
     constructor(
         private fb: FormBuilder,
         public dialogRef: DialogRef<Partial<Job>>,
-        @Inject(DIALOG_DATA) public data: any
+        @Inject(DIALOG_DATA) public data: { job?: Job }
     ) {
+        this.isEditMode = !!data?.job;
+
         this.form = this.fb.group({
-            company: ['', Validators.required],
-            role: ['', Validators.required],
-            status: ['Wishlist', Validators.required],
-            dateApplied: [new Date().toISOString().split('T')[0], Validators.required],
-            salaryRange: [''],
-            location: [''],
-            recruitingContact: [''],
-            comments: [''],
-            description: [''],
-            url: ['', [Validators.pattern('https?://.+')]],
-            glassdoorUrl: ['', [Validators.pattern('https?://.+')]]
+            company: [data?.job?.company || '', Validators.required],
+            role: [data?.job?.role || '', Validators.required],
+            status: [data?.job?.status || 'Wishlist', Validators.required],
+            dateApplied: [data?.job?.dateApplied ? new Date(data.job.dateApplied).toISOString().split('T')[0] : new Date().toISOString().split('T')[0], Validators.required],
+            salaryRange: [data?.job?.salaryRange || ''],
+            location: [data?.job?.location || ''],
+            recruitingContact: [data?.job?.recruitingContact || ''],
+            comments: [data?.job?.comments || ''],
+            description: [data?.job?.description || ''],
+            url: [data?.job?.url || '', [Validators.pattern('https?://.+')]],
+            glassdoorUrl: [data?.job?.glassdoorUrl || '', [Validators.pattern('https?://.+')]]
         });
     }
 
@@ -46,24 +55,62 @@ export class AddJobDialogComponent {
         }
     }
 
-    onSubmit() {
+    async onSubmit() {
         if (this.form.valid) {
+            this.isUploading.set(true);
             const formValue = this.form.value;
-            const newJob: Partial<Job> = {
+
+            const jobData: Partial<Job> = {
                 ...formValue,
                 dateApplied: formValue.dateApplied ? new Date(formValue.dateApplied) : new Date(),
-                documents: this.selectedFile() ? {
-                    cvUrl: URL.createObjectURL(this.selectedFile()!),
-                    coverLetterUrl: ''
-                } : undefined,
-                createdAt: new Date(),
                 updatedAt: new Date()
             };
-            // We could attach the file to the result if needed
-            this.dialogRef.close(newJob);
+
+            try {
+                // Handle File Upload
+                let cvUrl = this.data?.job?.documents?.cvUrl || '';
+
+                if (this.selectedFile()) {
+                    const user = this.auth.user();
+                    if (user) {
+                        const file = this.selectedFile()!;
+                        const path = `users/${user.uid}/resumes/${Date.now()}_${file.name}`;
+                        const storageRef = ref(this.storage, path);
+                        const result = await uploadBytes(storageRef, file);
+                        cvUrl = await getDownloadURL(result.ref);
+                    }
+                }
+
+                if (cvUrl) {
+                    jobData.documents = {
+                        cvUrl,
+                        coverLetterUrl: ''
+                    };
+                }
+
+                if (this.isEditMode && this.data.job) {
+                    this.dialogRef.close({
+                        ...this.data.job,
+                        ...jobData
+                    });
+                } else {
+                    this.dialogRef.close({
+                        ...jobData,
+                        createdAt: new Date()
+                    });
+                }
+            } catch (err) {
+                console.error('Upload failed', err);
+            } finally {
+                this.isUploading.set(false);
+            }
         } else {
             this.form.markAllAsTouched();
         }
+    }
+
+    get isGuest(): boolean {
+        return !this.auth.user();
     }
 
     close() {

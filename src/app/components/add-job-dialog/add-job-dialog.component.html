@@ -1,17 +1,17 @@
 <div
     class="bg-slate-900 border border-slate-700 rounded-xl shadow-2xl w-[500px] max-w-[90vw] overflow-hidden flex flex-col max-h-[90vh]">
     <!-- Header -->
-    <div class="p-5 border-b border-slate-700 flex justify-between items-center bg-slate-800/50">
-        <h2 class="text-xl font-bold text-white">{{ 'ADD_JOB.TITLE' | translate }}</h2>
-        <button (click)="close()" class="text-slate-400 hover:text-white transition-colors">
+    <div class="flex items-center justify-between p-6 border-b border-slate-700/50">
+        <h2 class="text-xl font-semibold text-slate-100">{{ (isEditMode ? 'ADD_JOB.EDIT_TITLE' : 'ADD_JOB.TITLE') |
+            translate }}</h2>
+        <button (click)="close()" class="text-slate-400 hover:text-slate-200 transition-colors">
             <span class="material-icons">close</span>
         </button>
     </div>
 
-    <!-- Scrollable Content -->
-    <div class="p-6 overflow-y-auto custom-scrollbar">
-        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
-
+    <!-- Content -->
+    <div class="p-6 max-h-[70vh] overflow-y-auto custom-scrollbar">
+        <form [formGroup]="form" class="space-y-6">
             <!-- Company & Role -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="space-y-1.5">
@@ -105,41 +105,55 @@
             </div>
 
             <!-- Resume Upload -->
-            <div class="space-y-2 pt-2 border-t border-slate-800">
+            <div class="space-y-1.5">
                 <label class="text-sm font-medium text-slate-400 block">{{ 'ADD_JOB.RESUME' | translate }}</label>
-
-                <div class="relative group cursor-pointer">
+                @if (isGuest) {
+                <div
+                    class="border-2 border-dashed border-slate-700 rounded-lg p-6 text-center bg-slate-800/20 opacity-60 cursor-not-allowed">
+                    <div class="flex flex-col items-center gap-2 text-slate-500">
+                        <span class="material-icons text-3xl">lock</span>
+                        <span class="font-medium text-sm">Sign in to attach a resume</span>
+                        <span class="text-xs">File uploads require an account</span>
+                    </div>
+                </div>
+                } @else {
+                <div
+                    class="border-2 border-dashed border-slate-700 rounded-lg p-6 text-center hover:border-indigo-500/50 hover:bg-slate-800/30 transition-all cursor-pointer relative group">
                     <input type="file" (change)="onFileSelected($event)" accept=".pdf,.doc,.docx"
                         class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
 
-                    <div
-                        class="border-2 border-dashed border-slate-700 rounded-lg p-6 flex flex-col items-center justify-center transition-colors group-hover:border-indigo-500/50 group-hover:bg-slate-800/30">
-                        @if (selectedFile(); as file) {
-                        <div class="flex items-center gap-3 text-indigo-400">
-                            <span class="material-icons">description</span>
-                            <span class="font-medium truncate max-w-[200px]">{{ file.name }}</span>
-                            <span class="text-xs text-slate-500">({{ (file.size / 1024 / 1024) | number:'1.1-2' }}
-                                MB)</span>
-                        </div>
-                        <p class="text-xs text-slate-500 mt-2">Click to replace</p>
-                        } @else {
-                        <span
-                            class="material-icons text-slate-500 text-3xl mb-2 group-hover:text-indigo-400 transition-colors">cloud_upload</span>
-                        <p class="text-sm text-slate-300 font-medium">Click to upload Resume</p>
-                        <p class="text-xs text-slate-500 mt-1">PDF, DOCX up to 5MB</p>
-                        }
+                    @if (selectedFile()) {
+                    <div class="flex flex-col items-center gap-2 text-indigo-400">
+                        <span class="material-icons text-3xl">description</span>
+                        <span class="font-medium text-sm">{{ selectedFile()?.name }}</span>
+                        <span class="text-xs text-slate-500">Click to replace</span>
                     </div>
+                    } @else if (data?.job?.documents?.cvUrl && !selectedFile()) {
+                    <div class="flex flex-col items-center gap-2 text-emerald-400">
+                        <span class="material-icons text-3xl">check_circle</span>
+                        <span class="font-medium text-sm">Resume Attached</span>
+                        <span class="text-xs text-slate-500">Click to replace</span>
+                    </div>
+                    } @else {
+                    <div class="flex flex-col items-center gap-2 text-slate-500 group-hover:text-slate-400">
+                        <span class="material-icons text-3xl">cloud_upload</span>
+                        <span class="font-medium text-sm">Drop resume or click to browse</span>
+                    </div>
+                    }
                 </div>
+                }
             </div>
-
         </form>
     </div>
 
-    <!-- Footer -->
-    <div class="p-5 border-t border-slate-700 flex justify-end gap-3 bg-slate-800/30">
-        <app-button variant="secondary" (click)="close()">{{ 'CANCEL' | translate }}</app-button>
+    <!-- Actions -->
+    <div class="p-6 border-t border-slate-700/50 flex justify-end gap-3 bg-slate-900/50">
+        <button (click)="close()"
+            class="px-4 py-2 text-sm font-medium text-slate-400 hover:text-slate-200 transition-colors">
+            {{ 'CANCEL' | translate }}
+        </button>
         <app-button variant="primary" (click)="onSubmit()" [disabled]="form.invalid">
-            {{ 'ADD_JOB.SUBMIT' | translate }}
+            {{ (isEditMode ? 'ADD_JOB.UPDATE' : 'ADD_JOB.SUBMIT') | translate }}
         </app-button>
     </div>
 </div>

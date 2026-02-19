@@ -5,8 +5,9 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 import { ButtonComponent } from '../../shared/components/button/button.component';
 import { CommonModule, DatePipe, CurrencyPipe } from '@angular/common';
-import { Dialog, DialogModule } from '@angular/cdk/dialog';
+import { Dialog } from '@angular/cdk/dialog';
 import { AddJobDialogComponent } from '../add-job-dialog/add-job-dialog.component';
+import { ConfirmationDialogComponent } from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 type SortDirection = 'asc' | 'desc' | '';
 type SortColumn = 'company' | 'role' | 'status' | 'dateApplied' | 'salaryRange' | '';
@@ -56,6 +57,40 @@ export class JobsGridComponent {
                 } as Job;
 
                 this.store.addJob(newJob);
+            }
+        });
+    }
+
+    onEditApplication(job: Job) {
+        const dialogRef = this.dialog.open<Job>(AddJobDialogComponent, {
+            width: '500px',
+            disableClose: true,
+            panelClass: 'bg-transparent',
+            data: { job }
+        });
+
+        dialogRef.closed.subscribe(result => {
+            if (result) {
+                this.store.updateJob(result);
+            }
+        });
+    }
+
+    onDeleteApplication(id: string) {
+        const dialogRef = this.dialog.open<boolean>(ConfirmationDialogComponent, {
+            width: '400px',
+            panelClass: 'bg-transparent',
+            disableClose: true,
+            data: {
+                title: 'Delete Application',
+                message: 'Are you sure you want to delete this application? This action cannot be undone.',
+                isDestructive: true
+            }
+        });
+
+        dialogRef.closed.subscribe(confirmed => {
+            if (confirmed) {
+                this.store.deleteJob(id);
             }
         });
     }

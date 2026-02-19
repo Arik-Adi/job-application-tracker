@@ -14,4 +14,12 @@ export const routes: Routes = [
         path: 'pipeline',
         loadComponent: () => import('./components/pipeline/pipeline.component').then(m => m.PipelineComponent)
     },
+    {
+        path: 'settings',
+        loadComponent: () => import('./components/settings/settings.component').then(m => m.SettingsComponent)
+    },
+    {
+        path: 'knowledge-base',
+        loadComponent: () => import('./components/knowledge-base/knowledge-base.component').then(m => m.KnowledgeBaseComponent)
+    },
 ];

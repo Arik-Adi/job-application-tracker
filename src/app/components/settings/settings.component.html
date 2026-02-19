@@ -1,0 +1,56 @@
+<div class="space-y-6 p-6">
+    <app-page-header>
+        <ng-container title>Settings</ng-container>
+        <ng-container subtitle>Manage your account and preferences</ng-container>
+    </app-page-header>
+
+    <!-- Account -->
+    <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+        <div class="p-5 border-b border-slate-700">
+            <h3 class="text-base font-semibold text-white">Account</h3>
+        </div>
+        <div class="p-5">
+            @if (auth.user$ | async; as user) {
+            <div class="flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    @if (user.photoURL) {
+                    <img [src]="user.photoURL" [alt]="user.displayName || 'avatar'"
+                        class="w-10 h-10 rounded-full border border-slate-600">
+                    } @else {
+                    <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-sm">
+                        {{ (user.displayName || user.email || '?')[0].toUpperCase() }}
+                    </div>
+                    }
+                    <div>
+                        <p class="text-slate-200 font-medium">{{ user.displayName || 'No name' }}</p>
+                        <p class="text-slate-500 text-sm">{{ user.email }}</p>
+                    </div>
+                </div>
+                <app-button variant="outline" (click)="logout()">Sign Out</app-button>
+            </div>
+            } @else {
+            <div class="flex items-center justify-between gap-4">
+                <div>
+                    <p class="text-slate-300 font-medium">You're browsing as a guest</p>
+                    <p class="text-slate-500 text-sm">Sign in to sync your jobs across devices</p>
+                </div>
+                <app-button (click)="login()">Sign in with Google</app-button>
+            </div>
+            }
+        </div>
+    </div>
+
+    <!-- Data -->
+    <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+        <div class="p-5 border-b border-slate-700">
+            <h3 class="text-base font-semibold text-white">Data</h3>
+        </div>
+        <div class="p-5 flex items-center justify-between gap-4">
+            <div>
+                <p class="text-slate-300 font-medium">Clear local data</p>
+                <p class="text-slate-500 text-sm">Removes all locally stored jobs. Cloud data is not affected.</p>
+            </div>
+            <app-button variant="danger" (click)="clearData()">Clear Data</app-button>
+        </div>
+    </div>
+</div>

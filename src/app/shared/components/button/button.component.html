@@ -1,4 +1,7 @@
 <button [type]="type" [disabled]="disabled" [class]="baseClasses + ' ' + variantClasses" [class.opacity-50]="disabled"
     [class.cursor-not-allowed]="disabled">
+    @if (icon) {
+    <span class="material-icons text-[18px]">{{ icon }}</span>
+    }
     <ng-content></ng-content>
 </button>
